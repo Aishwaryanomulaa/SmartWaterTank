@@ -1,0 +1,9 @@
+  violation type: MetSpc
+    srcs: _04_ clknet_0_clk 
+    bbox = ( 20.4, 25.785 ) - ( 20.54, 25.895 ) on Layer met1
+  violation type: MetSpc
+    srcs: _04_ clknet_0_clk 
+    bbox = ( 20.365, 25.785 ) - ( 20.615, 25.895 ) on Layer met1
+  violation type: CutSpc
+    srcs: _04_ clknet_0_clk 
+    bbox = ( 20.425, 25.755 ) - ( 20.555, 25.925 ) on Layer li1

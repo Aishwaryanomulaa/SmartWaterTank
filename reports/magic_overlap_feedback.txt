@@ -1,0 +1,18 @@
+box 4069 5219 4105 5227
+feedback add "Illegal overlap (types do not connect)" medium
+box 4069 5203 4077 5219
+feedback add "Illegal overlap (types do not connect)" medium
+box 4077 5203 4105 5219
+feedback add "Illegal overlap (types do not connect)" medium
+box 2626 5865 2651 5933
+feedback add "Illegal overlap (types do not connect)" medium
+box 2630 5672 2651 5685
+feedback add "Illegal overlap (types do not connect)" medium
+box 2630 5651 2651 5672
+feedback add "Illegal overlap (types do not connect)" medium
+box 2630 5627 2651 5651
+feedback add "Illegal overlap (types do not connect)" medium
+box 2630 5616 2639 5627
+feedback add "Illegal overlap (types do not connect)" medium
+box 2639 5616 2651 5627
+feedback add "Illegal overlap (types do not connect)" medium
