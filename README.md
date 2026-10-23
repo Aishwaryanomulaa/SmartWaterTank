@@ -1,161 +1,186 @@
-# Smart Water Tank Controller
+# Smart Water Tank Controller — RTL to GDS
 
 ## 1. Project Overview
 
-The **Smart Water Tank Controller** is a digital RTL design that controls a water pump based on water-level inputs and safety conditions. The controller starts pumping when the tank level is low, stops when the tank is full, and disables pumping when a fault condition is detected.
+The **Smart Water Tank Controller** is a digital design project developed using Verilog HDL. It implements a controller that manages water-pump operation according to tank-level signals and safety conditions.
 
-The project demonstrates digital design using Verilog HDL, functional verification through simulation, logic synthesis using Yosys, and physical design using OpenLane with the Sky130A standard-cell platform.
+The design was taken through RTL simulation, logic synthesis, and physical-design implementation using the SkyWater SKY130 platform and OpenLane.
+
+The project demonstrates the RTL-to-GDS design flow used in digital VLSI design.
 
 ## 2. Objectives
 
-- Design a digital water tank pump controller using Verilog HDL.
-- Control pump operation based on water-level inputs.
-- Detect dry-run and motor-fault conditions.
-- Verify controller behavior using a testbench.
-- Perform logic synthesis using Yosys.
-- Implement the design through the OpenLane physical-design flow.
-- Generate GDS layout output and document the implementation results.
+- Design a digital water-tank controller using Verilog HDL.
+- Control pump operation using low-level and high-level sensor inputs.
+- Include dry-run and motor-fault safety conditions.
+- Verify controller behaviour using a testbench.
+- Perform logic synthesis and physical-design implementation.
+- Generate a GDS layout and examine implementation reports.
 
-## 3. Inputs and Outputs
+## 3. Functional Description
+
+The controller uses three logical states:
+
+- **IDLE:** The pump is not actively pumping.
+- **PUMPING:** The controller enables the pump when pumping is required and permitted.
+- **FAULT:** The controller disables normal pumping when a supported fault condition is detected.
+
+The controller receives sensor and fault signals as digital inputs and produces pump-control and tank-status outputs.
 
 ### Inputs
 
 | Signal | Description |
 |---|---|
-| `clk` | Clock signal |
+| `clk` | Clock input |
 | `rst` | Active-high reset |
-| `low_level` | Indicates that the water level is low |
-| `high_level` | Indicates that the tank is full |
-| `dry_run` | Indicates a dry-run fault condition |
-| `motor_fault` | Indicates a motor fault condition |
+| `low_level` | Indicates a low tank-water level |
+| `high_level` | Indicates the high-level or full-tank condition |
+| `dry_run` | Indicates a dry-run fault |
+| `motor_fault` | Indicates a motor fault |
 
 ### Outputs
 
 | Signal | Description |
 |---|---|
-| `pump_enable` | Enables the pump when pumping is permitted |
-| `tank_full` | Indicates that the high-level input is active |
+| `pump_enable` | Controls whether pump operation is enabled |
+| `tank_full` | Indicates the high-level input condition |
 
-## 4. Controller States
+This project implements the digital control logic. It is not a physical water tank or an IoT monitoring system.
 
-The controller uses three logical states:
+## 4. Tools and Technologies
 
-- **IDLE:** The controller is not actively pumping.
-- **PUMPING:** The pump is enabled when the water level and safety conditions permit operation.
-- **FAULT:** Pumping is disabled when a fault condition is detected.
+- **Verilog HDL:** RTL design
+- **RTL simulation:** Functional verification using a testbench
+- **Yosys:** Logic synthesis
+- **OpenLane:** RTL-to-GDS physical-design flow
+- **OpenROAD:** Physical-design implementation and routing tools
+- **SKY130A:** Standard-cell technology platform
+- **Magic / KLayout:** Layout viewing and related physical-design tools
+- **GitHub:** Source-code and project-artifact management
 
-The controller uses the input signals and its internal state to determine the appropriate pump-control output.
+## 5. Design and Implementation Flow
 
-## 5. Functional Verification
+The project follows these stages:
 
-A Verilog testbench was used to verify the controller's behavior.
+1. RTL design using Verilog HDL.
+2. Testbench development and functional simulation.
+3. Logic synthesis using Yosys.
+4. Floorplanning and placement.
+5. Clock-tree synthesis (CTS).
+6. Global and detailed routing.
+7. Layout generation in GDS format.
+8. Review of physical-verification and timing reports.
+
+## 6. Verification and Results
+
+### Functional verification
 
 The testbench passed six checks:
 
-1. Reset behavior
-2. Pump start when the water level is low
-3. Pump stop when the tank is full
-4. Dry-run fault handling
-5. Motor-fault handling
-6. Safe recovery after a fault condition
+1. Reset behaviour.
+2. Pump activation when the tank level is low.
+3. Pump deactivation when the tank reaches the high-level condition.
+4. Dry-run fault handling.
+5. Motor-fault handling.
+6. Safe recovery after a fault condition is cleared.
 
-These checks validate the expected behavior of the RTL under the tested conditions.
+### Synthesis
 
-## 6. Logic Synthesis
+Generic Yosys synthesis completed successfully. The design was mapped to standard cells for physical-design implementation.
 
-Generic logic synthesis was performed using **Yosys**.
+### Physical design
 
-The synthesis process translated the Verilog RTL into a gate-level representation. The synthesis run completed successfully, and the design was prepared for the physical-design flow.
+OpenLane completed the recorded run `23-10_12-36` and generated GDS layout files.
 
-## 7. Physical Design
+The recorded results for this run included:
 
-Physical implementation was performed using **OpenLane** with the **Sky130A / `sky130_fd_sc_hd`** standard-cell platform.
+- Zero Magic DRC violations.
+- Zero LVS net, device, pin, and property mismatches.
+- Zero reported antenna violations.
+- Zero reported CVC violations.
 
-The latest run used for documentation is:
+These statements refer to the recorded run and its available reports.
 
-`23-10_12-36`
+### Timing analysis
 
-The OpenLane flow completed without fatal errors.
+Timing paths with positive slack were observed in the available reports. However, complete post-route timing closure has not been conclusively established because some timing reports were empty or reported that no paths were found.
 
-### Reported verification results
+Therefore, the design's functional simulation and reported physical checks should be distinguished from full post-route timing sign-off.
 
-The final summary for this run reported:
-
-- Zero TritonRoute DRC violations
-- Zero Magic DRC violations
-- Zero antenna violations
-- Zero LVS errors
-- Zero CVC errors
-
-The LVS report stated that there were no net, device, pin, or property mismatches.
-
-GDS layout output was generated and saved with the associated reports and screenshots.
-
-### Timing status
-
-The inspected synthesis-stage timing report contained timing paths with positive slack, including a reported slack of **4.39 ns** for the displayed maximum-delay path from `motor_fault` to `pump_enable`.
-
-However, the available post-resizer timing-path report stated that no paths were found, and the FastRoute timing report was empty. Therefore, complete post-route timing closure has **not been confirmed**.
-
-The reported physical-verification results and the timing limitations should be considered separately.
-
-## 8. Project Directory Structure
+## 7. Repository Structure
 
 ```text
 SmartWaterTank/
 ├── rtl/
 │   └── water_tank_controller.v
 ├── tb/
-│   └── water_tank_controller_tb.v
-├── gds/
 ├── reports/
 ├── screenshots/
-└── physical_design/
-    └── run_23-10_12-36/
-        ├── gds/
-        │   └── water_tank_controller.gds
-        ├── reports/
-        │   ├── final_summary_report.csv
-        │   ├── 2-opensta.min_max.rpt
-        │   ├── 10-opensta_post_resizer_wns.rpt
-        │   ├── 18-fastroute.timing.rpt
-        │   ├── 21-tritonRoute.drc
-        │   ├── 24-opensta_spef.timing.rpt
-        │   └── 39-magic.drc
-        └── screenshots/
-            ├── water_tank_controller.placement.def.png
-            ├── water_tank_controller.cts.def.png
-            └── water_tank_controller.gds.png
+├── gds/
+├── physical_design/
+│   └── run_23-10_12-36/
+├── .gitignore
+├── README.md
+└── water_tank.vcd
 ```
 
-*Note: The directory tree shows the expected main project files and documented artifacts. Actual filenames may vary slightly depending on the files present in the repository.*
+- `rtl/` — Original Verilog RTL source.
+- `tb/` — Testbench files for functional verification.
+- `reports/` — Synthesis, timing, routing, and verification reports.
+- `screenshots/` — Screenshots of simulation and implementation results.
+- `gds/` — Generated GDS layout files.
+- `physical_design/run_23-10_12-36/` — OpenLane run artifacts.
+- `water_tank.vcd` — Waveform file, if opened using a compatible waveform viewer.
 
-## 9. Tools and Technologies
+## 8. Running the Project
 
-- **Verilog HDL** — RTL design
-- **Icarus Verilog** — RTL simulation
-- **GTKWave** — Waveform viewing
-- **Yosys** — Logic synthesis
-- **OpenLane** — RTL-to-GDS physical-design flow
-- **Sky130A / `sky130_fd_sc_hd`** — Standard-cell platform
-- **Magic** — Layout and physical-verification tools
-- **Git and GitHub** — Version control and project documentation
+### Step 1: Clone the repository
 
-## 10. Project Outcome
+```bash
+git clone https://github.com/Aishwaryanomulaa/SmartWaterTank.git
+cd SmartWaterTank
+```
 
-The Smart Water Tank Controller demonstrates the design and verification of a digital pump-control system using RTL. Functional simulation and generic synthesis completed successfully. The latest documented OpenLane run generated GDS layout output and reported zero violations in the listed Magic DRC, TritonRoute, antenna, LVS, and CVC checks.
+### Step 2: Inspect the RTL source
 
-Post-route timing closure remains unconfirmed because the available detailed post-resizer and routing timing reports did not provide usable timing paths.
+Open `rtl/water_tank_controller.v` in a text editor or Verilog-compatible IDE.
 
-## 11. Future Improvements
+### Step 3: Run functional simulation
 
-- Investigate why the post-resizer and routing timing-path reports are empty.
-- Complete and document post-route static timing analysis.
-- Extend testbench coverage for additional input combinations and corner cases.
-- Improve design documentation with RTL, waveform, placement, clock-tree synthesis, and final-layout screenshots.
-- Explore further optimization of area, timing, and power.
+Use a Verilog simulator such as Icarus Verilog with the source file and the testbench available in `tb/`. Use the testbench's actual filename when compiling and running the simulation.
+
+### Step 4: Inspect the waveform
+
+Open the generated VCD file in GTKWave or another compatible waveform viewer to inspect the signals over time.
+
+### Step 5: Review the physical-design results
+
+Inspect the reports, screenshots, and GDS files included in the repository. The OpenLane flow requires a compatible Linux/Docker environment and a configured SKY130A PDK.
+
+## 9. Applications
+
+The controller demonstrates digital logic concepts that are relevant to:
+
+- Automated water-pump control.
+- Sensor-based control systems.
+- Fault-aware digital controllers.
+- Finite-state machines.
+- RTL design and VLSI physical-design education.
+
+The implementation is a digital design prototype; real-world deployment would require appropriate sensors, pump-driving hardware, electrical protection, and system-level validation.
+
+## 10. Future Improvements
+
+- Extend verification with additional corner cases.
+- Improve timing constraints and confirm complete post-route timing analysis.
+- Add more comprehensive automated regression tests.
+- Evaluate the controller under additional operating conditions.
+- Integrate the digital controller with suitable external hardware in a future version.
+
+## 11. Conclusion
+
+The Smart Water Tank Controller demonstrates the development of a Verilog-based sequential digital controller and its implementation through an RTL-to-GDS flow. Functional simulation passed the six planned checks, synthesis completed, and the recorded OpenLane run generated a GDS layout with the reported physical-verification results. Further timing verification would be required before claiming complete post-route timing closure.
 
 ## 12. Repository
 
-**GitHub:** [SmartWaterTank — Aishwaryanomulaa](https://github.com/Aishwaryanomulaa/SmartWaterTank)
-
+**GitHub:** https://github.com/Aishwaryanomulaa/SmartWaterTank
