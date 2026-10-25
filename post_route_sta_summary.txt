@@ -1,0 +1,37 @@
+SmartWaterTank — Post-Route STA Summary
+Clock period: 10 ns
+
+SS corner — Setup (100°C, 1.60 V)
+Path Type: max
+                                  8.02   slack (MET)
+Path Type: max
+                                  8.20   slack (MET)
+Path Type: max
+                                  4.39   slack (MET)
+Path Type: max
+                                  5.32   slack (MET)
+Path Type: max
+                                  5.33   slack (MET)
+Path Type: max
+                                  5.67   slack (MET)
+wns 0.00
+tns 0.00
+
+FF corner — Hold (-40°C, 1.95 V)
+Path Type: min
+                                  1.90   slack (MET)
+Path Type: min
+                                  1.95   slack (MET)
+Path Type: min
+                                  0.33   slack (MET)
+Path Type: min
+                                  0.33   slack (MET)
+Path Type: min
+                                  2.51   slack (MET)
+Path Type: min
+                                  4.22   slack (MET)
+wns 0.00
+tns 0.00
+
+Caveat: Custom STA analysis; physical-only cells are treated as black boxes.
+This is diagnostic evidence, not definitive multi-corner sign-off.
