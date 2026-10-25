@@ -115,6 +115,7 @@ SmartWaterTank/
 │   └── water_tank_controller.v
 ├── tb/
 ├── reports/
+├── post_route_sta_summary.txt
 ├── screenshots/
 ├── gds/
 ├── physical_design/
